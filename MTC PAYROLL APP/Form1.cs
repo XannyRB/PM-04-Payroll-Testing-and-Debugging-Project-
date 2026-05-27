@@ -44,6 +44,13 @@ namespace MTC_PAYROLL_APP
                 return;
             }
 
+            if (dependents >10)
+            {
+                MessageBox.Show("Dependents cannot exceed the maximum limit of 10. Defaulting to 10 for Calculation", "Validation Warning");
+                dependents = 10; //Force it to the maximum limit of 10 for calculation purposes
+                txtDependents.Text = "10"; //Update the input box so the user sees the chanege.
+            }
+
             //Connect to Brain
 
             //Instance of math class
