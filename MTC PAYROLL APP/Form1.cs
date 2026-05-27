@@ -58,7 +58,7 @@ namespace MTC_PAYROLL_APP
             lblPAYE.Text = calculator.PayeTax.ToString("C");
             lblMembership.Text = calculator.MembershipFee.ToString("C");
             lblTotalDeductions.Text = calculator.TotalDeductions.ToString("C");
-            lblNetPay.Text = calculator.NetPay.ToString("N");
+            lblNetPay.Text = calculator.NetPay.ToString("C");
         }
 
         // Reset Button
@@ -85,6 +85,11 @@ namespace MTC_PAYROLL_APP
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
