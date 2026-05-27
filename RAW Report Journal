@@ -1,0 +1,121 @@
+PM-04 STEPS ALSO THOUGHTS
+Type as I go
+
+So I have to develop a GUI Application for viewing contractor payroll details and displays it (Using C#).
+
+In visual Studio now, Will start a new project using the "Windows Forms App (.NET Framework) template.
+Exception from HRESULT: 0x80041FE4
+Points to Visual Studio Environment issue. Will repair via Visual Studio installer.
+While waiting for installation of packages I will sketch the GUI (Rough, Basic Layout Concept.)
+Via Figma
+
+GUI Layout:
+The Layout will look like the following: Input boxes such as Contractors name and hours worked will be in the top section of the screen. The displayed info such as Deductions and net pay will be in the lower section. At the bottom will the Calc, Clear, and Exit buttons be located.
+Rough Sketch is finished.
+
+Created new class "PayRollCalculator"
+This will house the Math Logic
+
+But first I will "design" the layout.
+Adding Static Labels.
+Now adding dynamic Labels
+Now Adding Buttons
+
+Considering using groupboxes for grouping. Or plain label with fixed3d border...
+I will use empty bordered labels for ease of movement.
+
+Tested GUI display-Expected Result: Displays Window/page as designed in Visual Studio- Actual result: Window displayed with no errors or warnings. Success.
+
+
+Next I will write the math logic for the calculations.
+Changing internal to public, ensures the form1 has full permission to reach across and talk to math logic without running into security errors.
+
+Will now create foundational layout for variables and properties.
+Layout is created, no need to test anything since nothing is connected yet. 
+
+Math logic written, no need to test yet since nothing is connected yet. But sofar no syntax errors.
+
+Now moving on to form1.cs file, 
+Writing validation rules and button events.
+
+Done with validation and connecting. 
+Bug is present. 
+After filling in input fields buttons do not work, Calculate, Reset, Exit.
+Investigating.
+Visual Button doesn't know its supposed to trigger the specific code when clicked-fixed by assigning events to each button.-Fixed
+All buttons work as intended, Calculate, Reset, Exit. Even Validation rules work. 
+
+New issue, all calculations except for UIF display, UIF displays R0.00, should display 1% of Gross Pay
+Investigating.
+Found misspelling, Instead of UifDeductions, it was UIFDeductions. 
+testing again: Fixed
+
+Seems to be working, One validation rule not working correctly, Contractors name should only accept Non-Numeric. Well it is  not listed in requirements for assignment. Not important now, check later NB!!!!!
+
+Cleanup:
+moved .gitignore to root directory
+moved .slnx to root directory
+rm nested .gitignore and .slnx from MTC folder
+rm .vs folder (Was uploaded since .gitignore was not in coreect directory)
+
+Was quite frankly bug free, compared to other projects. Still needs more cleanup, noticed misspelling of Calculate button, and Calculated Net Pay has missing Rand symbol
+
+So when calculating the Net Pay, the output displays the number without the currency Symbol-Investigating
+Found poetantial issue,  Line 61 (atot) the line reads calculator.NetPay.ToString("N"), which should be … ToString("C"), changed, will test again now.
+Fixed
+
+Rearranged all GUI elements for better readability and added Title to the Page
+Fixed Calcaulate button misspelling
+
+Okay, everything is Finished, well as far as coding goes for the assignment. Now I will put everything together in one single pdf file, such as test cases, and reports.
+
+
+
+
+Separate PART---- TEST CASES
+
+UNIT/LEVEL TEST CASES
+TC-01, Input: Name=John Doe, Hours=10, Dependents=0, Variable Under Test: Gross Pay(10x R950), Expected Output: R9500, Result= PASS
+
+TC-02, Input: Name=John Doe, Hours=10, Dependents=0, VAR under test: UIF Deduct(1% of Gross), Expected Output: R95,00, Reslut= PASS
+
+TC-03, Input: Name=John Doe, Hours=10, Dependents=0, VAR under test: Membership Fee(13% of Gross), Expected Output: R1 235.00, Result= PASS
+
+TC-04, Input: Name=John Doe, Hours=10, Dependents=0, VAR under test: PAYE Deduct(Form with 0 Dep), Expected output: R2 375.00, Result= Pass
+
+TC-05, Input: Name=John Doe, Hours=10, Dependents=0, VAR under test: Net Pay(Gross -Deduct), Expected output: R5 795.00, Result= Pass
+
+TC-06, Input: Name=Jane Smith, Hours=40, Dependents=2, VAR under test: Net Pay(High Hours+Dependents), Expected Outout: R24 272.50, Result= PASS
+
+
+Step,Action,Expected Result,Actual Result
+1,Launch the application.,The UI loads smoothly; all input boxes are empty; dynamic result labels display default states or blanks.,Match. Application initialized with no loading hangs.
+2,"Enter invalid data (e.g., text into Hours/Dependents) and click Calculate.",Application intercepts the bad data via validation rules and displays a clear error warning instead of crashing.,Match. Error pop-up triggered; calculations halted safely.
+3,"Enter standard text/numbers, click Calculate, then click Clear / Reset.","All textboxes are emptied, focus returns to the Name field, and calculation labels clear out.",Match. Form cleanly wiped back to default state.
+4,Click the Exit button.,The application safely terminates the running process and closes the window completely.,Match. Application closed instantly without hanging background threads.
+
+3. Retesting Report
+Retesting documents the verified status of isolated components immediately following your targeted code bug fixes.
+
+Defect 1: Action Button Wire-ups
+Initial Fault: Clicking the UI buttons (Calculate, Reset, Exit) produced no behavior because event handlers were unmapped in the background designer code.
+
+Action Taken: Manually mapped control click events inside Form1.Designer.cs.
+
+Retest Pass Verification: Entered valid testing values and executed all control actions. The calculation engine fired perfectly, the clear script functioned, and the exit script closed the window.
+
+Defect 2: UIF Text Case Discrepancy
+Initial Fault: The Unemployment Insurance Fund field consistently displayed a flat R0.00 despite a positive Gross Pay input.
+
+Action Taken: Aligned string reference casing from the unauthorized typo UIFDeductions to the math calculation component variable UifDeduction.
+
+Retest Pass Verification: Calculated a baseline sample of 10 hours (Gross Pay: R9,500.00). The field successfully outputted exactly 1% (R95.00) as expected.
+
+WAIT, Forgot about Dependent cap, there is no limit in place for Dependents. Will implement now.
+
+
+Implemented change, will test
+
+Test Case ID,Input Data,Variable Under Test,Expected Output / Behavior,Actual Result,Status
+TC-07 (Boundary),Name: Alex DoeHours: 20Dependents: 15,Dependents Cap Validation,"Application flags input, throws a validation message, and caps calculation data at 10 dependents.",Match. Triggered warning and forced value to 10.,Pass
+
